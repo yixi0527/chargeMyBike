@@ -83,7 +83,9 @@ def query_station(station, session):
                     data_to_save = []
                     for product in products:
                         end_time_ms = product.get('endTime')
-                        if end_time_ms != '未知' and end_time_ms is not None:
+                        if end_time_ms is not None:
+                            if end_time_ms == '未知':
+                                end_time_ms = 0.0
                             end_time_hms = convert_milliseconds_to_hms(int(end_time_ms))
                             data = {
                                 "station_name": station["name"],

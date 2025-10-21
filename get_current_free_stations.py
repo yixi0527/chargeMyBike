@@ -58,7 +58,9 @@ def query_station(station, session):
             products = response_data.get('products', [])
             for product in products:
                 end_time_ms = product.get('endTime')
-                if end_time_ms not in (None, '未知'):
+                if end_time_ms is not None:
+                    if end_time_ms == '未知':
+                        end_time_ms = 0.0
                     results.append({
                         "station_name": station["name"],
                         "sid": product["sid"],
@@ -100,7 +102,7 @@ if data:
     total_count = len(df)
     zero_end_count = (df['end_time_ms'] == 0).sum()
     
-    st.markdown(f"**共 {total_count} 条数据，其中 end time 为 0 的有 {zero_end_count} 条**")
+    st.markdown(f"**共 {total_count} 条数据，其中空闲有 {zero_end_count} 个**")
     
     df_display = df[["station_name", "sid", "end_time_hms", "current_time"]]
     df_display.columns = ["站号", "口号", "剩余时间", "查询时间"]
