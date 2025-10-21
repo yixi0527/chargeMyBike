@@ -102,12 +102,15 @@ def highlight_remaining_time(row):
     total_seconds = h * 3600 + m * 60 + s
     
     if total_seconds == 0:
-        color = 'lightgreen'
+        # 空闲：绿色背景，红色字体
+        return ['background-color: lightgreen; color: red' for _ in row]
     elif total_seconds <= 2 * 3600:
-        color = 'yellow'
+        # 剩余时间 ≤2小时：黄色背景，黑色字体
+        return ['background-color: yellow; color: black' for _ in row]
     else:
-        color = ''
-    return [f'background-color: {color}' for _ in row]
+        # 其他：默认样式
+        return ['' for _ in row]
+
 
 
 # 显示表格
