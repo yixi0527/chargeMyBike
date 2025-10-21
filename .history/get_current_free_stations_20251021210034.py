@@ -91,20 +91,11 @@ else:
     data = fetch_all_data()
 
 # 显示表格
-# 显示表格
 if data:
     import pandas as pd
     df = pd.DataFrame(data)
-    
-    # 统计总条数和 end_time_ms 为 0 的条数
-    total_count = len(df)
-    zero_end_count = (df['end_time_ms'] == 0).sum()
-    
-    st.markdown(f"**共 {total_count} 条数据，其中 end time 为 0 的有 {zero_end_count} 条**")
-    
     df_display = df[["station_name", "sid", "end_time_hms", "current_time"]]
     df_display.columns = ["站号", "口号", "剩余时间", "查询时间"]
     st.dataframe(df_display, use_container_width=True)
 else:
     st.info("没有获取到数据。")
-
