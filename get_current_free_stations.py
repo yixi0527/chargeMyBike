@@ -4,6 +4,7 @@ import random
 from datetime import datetime
 from urllib3.exceptions import InsecureRequestWarning
 import warnings
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # 禁用 SSL 警告
 warnings.simplefilter('ignore', InsecureRequestWarning)
@@ -78,9 +79,12 @@ def fetch_all_data():
     session = requests.Session()
     session.headers.update(headers)
     all_results = []
-    for station in charge_stations:
-        all_results.extend(query_station(station, session))
-    # 按剩余时间排序
+
+    with ThreadPoolExecutor(max_workers=len(charge_stations)) as executor:
+        futures = [executor.submit(query_station, station, session) for station in charge_stations]
+        for future in as_completed(futures):
+            all_results.extend(future.result())
+
     all_results.sort(key=lambda x: x["end_time_ms"])
     return all_results
 
