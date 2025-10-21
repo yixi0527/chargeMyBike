@@ -111,7 +111,7 @@ def main():
     
     # 存储所有数据的缓存（避免频繁写入文件）
     data_cache = []
-    cache_threshold = 6*4*5 # 当缓存的数据条数达到这个阈值时，写入文件
+    cache_threshold = 6*4*5 # 当缓存的数据条数达到这个阈值时，写入文件，5分钟写一次
 
     # 统计已获取数据的条数
     total_data_count = 0

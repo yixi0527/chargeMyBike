@@ -92,6 +92,20 @@ if st.button("刷新数据"):
 else:
     data = fetch_all_data()
 
+def highlight_remaining_time(row):
+    # 将剩余时间字符串 "HH:MM:SS" 转换为秒数
+    h, m, s = map(int, row['剩余时间'].split(':'))
+    total_seconds = h * 3600 + m * 60 + s
+    
+    if total_seconds == 0:
+        color = 'lightgreen'
+    elif total_seconds <= 2 * 3600:
+        color = 'yellow'
+    else:
+        color = ''
+    return [f'background-color: {color}' for _ in row]
+
+
 # 显示表格
 # 显示表格
 if data:
@@ -106,7 +120,7 @@ if data:
     
     df_display = df[["station_name", "sid", "end_time_hms", "current_time"]]
     df_display.columns = ["站号", "口号", "剩余时间", "查询时间"]
-    st.dataframe(df_display, use_container_width=True)
+    st.dataframe(df_display.style.apply(highlight_remaining_time, axis=1), use_container_width=True)
 else:
     st.info("没有获取到数据。")
 
